@@ -1,34 +1,54 @@
+// index.js
 const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-// Endpoint para Health Check (GET) - Nuevo
-app.get('/health', (req, res) => {
-  res.status(200).json({
-    status: 'ok',
-    message: 'API operativa',
-    timestamp: new Date().toISOString(),
-    version: '1.0.0'
-  });
+/**
+ * GET /ping
+ * Endpoint de salud para Health Check en RapidAPI.
+ * Devuelve "pong" con status 200.
+ */
+app.get('/ping', (req, res) => {
+  res.status(200).send('pong');
 });
 
-// Ruta principal de la API (POST)
+/**
+ * POST /generar-idea
+ * Genera una idea de negocio simple basada en los datos de entrada.
+ * Body JSON esperado:
+ * {
+ *   intereses: string,
+ *   nivel_experiencia: string,
+ *   presupuesto: string,
+ *   pais: string
+ * }
+ */
 app.post('/generar-idea', (req, res) => {
-  const { intereses = '', nivel_experiencia = '', presupuesto = '', pais = '' } = req.body;
+  const {
+    intereses = '',
+    nivel_experiencia = '',
+    presupuesto = '',
+    pais = ''
+  } = req.body;
 
-  // Lógica provisional
+  // Lógica básica (placeholder) — la “IA” real la añadiremos después
   const idea = {
     idea_negocio: `Crea un blog o canal sobre ${intereses.trim() || 'tu pasión'} enfocado en personas de nivel ${nivel_experiencia || 'principiante'} en ${pais || 'tu país'}.`,
     dificultad: 'Fácil',
     modelo_monetizacion: 'Publicidad + contenidos premium',
-    necesitas: ['Conexión a Internet', 'Herramientas gratuitas', 'Redes sociales']
+    necesitas: [
+      'Conexión a Internet',
+      'Herramientas gratuitas',
+      'Redes sociales'
+    ]
   };
 
   res.json(idea);
 });
 
+// Arranque del servidor
 app.listen(PORT, () => {
   console.log(`✅ SmartBusinessIdeas API corriendo en http://localhost:${PORT}`);
 });
